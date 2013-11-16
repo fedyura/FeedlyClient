@@ -3,6 +3,8 @@
 
     <string name="app_name">FeedlyClient</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="rss_title">Feedly RSS client</string>
+    <string name="titul_image">RSS Cube</string>
+    <string name="get_started"> Get started! </string>
 
 </resources>

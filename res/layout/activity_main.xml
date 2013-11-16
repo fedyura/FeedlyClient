@@ -9,8 +9,37 @@
     tools:context=".MainActivity" >
 
     <TextView
+        android:id="@+id/MainText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:layout_centerHorizontal="true"
+        android:text="@string/rss_title"
+        android:textSize="28sp"
+        android:textColor="@android:color/holo_orange_light"
+        android:textStyle="bold|italic"/>
+    
+    <ImageView
+        android:id="@+id/MainImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/MainText"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/rss_cube"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/titul_image"/>
+    
+    <Button
+        android:id="@+id/StartButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/get_started"
+        android:textSize="24sp"
+        android:textStyle="bold|italic"
+        android:onClick="onClickGetStarted"
+        android:layout_alignBottom="@id/MainImage"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/get_started_button"
+        android:layout_marginTop="0dp"/>
+    
 
 </RelativeLayout>
