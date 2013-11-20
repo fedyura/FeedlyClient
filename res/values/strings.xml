@@ -6,5 +6,8 @@
     <string name="rss_title">Feedly RSS client</string>
     <string name="titul_image">RSS Cube</string>
     <string name="get_started"> Get started! </string>
-
+    <string name="title_activity_rssfeed">RSSFeedActivity</string>
+    <string name="hello_world">Hello world!</string>
+	<string name="dialog_error_title"> Error! </string>
+	<string name="faled_to_load_data"> Can\'t load data </string>
 </resources>

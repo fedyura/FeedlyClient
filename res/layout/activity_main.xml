@@ -38,8 +38,7 @@
         android:onClick="onClickGetStarted"
         android:layout_alignBottom="@id/MainImage"
         android:layout_alignParentRight="true"
-        android:background="@drawable/get_started_button"
-        android:layout_marginTop="0dp"/>
+        android:background="@drawable/get_started_button"/>
     
 
 </RelativeLayout>
