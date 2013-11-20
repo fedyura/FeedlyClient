@@ -12,7 +12,6 @@ public class FeedlyProvider extends ContentProvider {
 	private FeedlyDBHelper fDBHelper;
 	
 	private static final int CATEGORIES = 0;
-    
     private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     static {
         uriMatcher.addURI(FeedlyContract.AUTHORITY, FeedlyContract.Categories.TABLE_NAME, CATEGORIES);

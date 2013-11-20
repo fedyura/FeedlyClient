@@ -10,17 +10,16 @@ public final class FeedlyContract {
 	public static final Uri AUTHORITY_URI = Uri.parse("content://" + AUTHORITY);
 	
 	private static final String TEXT_TYPE = " TEXT";
-    private static final String INTEGER_TYPE = " INTEGER";
+    //private static final String INTEGER_TYPE = " INTEGER";
     
-    private static final String COMMA_SEP = ",";
+    //private static final String COMMA_SEP = ",";
     
 	public static final class Categories implements BaseColumns {
 		
 		public static final String CONTENT_PATH = "categories";
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, CONTENT_PATH);
-        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + CONTENT_PATH;
-		
 		public static final String TABLE_NAME = "Categories";
+		public static final Uri CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, TABLE_NAME);
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + CONTENT_PATH;
 		
 		public static final String COLUMN_NAME_CATEGORY_NAME = "name";
 		

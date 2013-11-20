@@ -22,6 +22,7 @@ public final class FeedlyOperation implements Operation {
 	public Bundle execute(Context context, Request request)
 			throws ConnectionException, DataException, CustomRequestException {
 		// TODO Auto-generated method stub
+		System.out.println("I was in operation");
 		NetworkConnection netConn = new NetworkConnection(context, "http://cloud.feedly.com/v3/categories");
 		
 		//HashMap<String, String> params = new HashMap<String, String>();
