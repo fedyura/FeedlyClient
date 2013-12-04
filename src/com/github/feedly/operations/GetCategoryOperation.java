@@ -17,18 +17,26 @@ import com.foxykeep.datadroid.network.NetworkConnection;
 import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService.Operation;
+import com.github.feedly.activities.RSSFeedActivity;
 import com.github.feedly.provider.FeedlyContract;
 import com.github.feedly.util.GetFeedlyCategories;
 
 public final class GetCategoryOperation implements Operation {
 
+	String categoryCode;
+	
+	public GetCategoryOperation() {
+		
+		categoryCode = RSSFeedActivity.curFeed;
+	}
+	
 	@Override
 	public Bundle execute(Context context, Request request)
 			throws ConnectionException, DataException, CustomRequestException {
 		// TODO Auto-generated method stub
 		
 		System.out.println("I was here");
-		GetFeedlyCategories feedlyCat = new GetFeedlyCategories(context);
+		GetFeedlyCategories feedlyCat = new GetFeedlyCategories(context, categoryCode);
 		NetworkConnection netConn = new NetworkConnection(context, feedlyCat.getEncodedUrl());
 		
 		System.out.println(feedlyCat.getOAuthToken());

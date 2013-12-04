@@ -8,15 +8,35 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".RSSFeedActivity" >
 
-    <FrameLayout
+    <RelativeLayout
+        android:id="@+id/top_bar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/fragment_container"/>
+        android:layout_height="wrap_content">
+    
+        <Button 
+            android:id="@+id/findButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="@string/findText"
+            android:textSize="12sp"
+            android:onClick="findFeeds"/>
+        
+        <EditText
+            android:id="@+id/topicEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/findButton"
+            android:layout_alignBottom="@id/findButton"
+            android:hint="@string/hintTopic"
+            android:textSize="16sp"/>
+    </RelativeLayout>    
     
     <ListView
         android:id="@+id/rssFeedListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/top_bar"
         android:indicatorLeft="250dp"
         android:indicatorRight="300dp"/>
 </RelativeLayout>

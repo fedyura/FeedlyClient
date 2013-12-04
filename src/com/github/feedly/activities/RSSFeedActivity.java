@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.foxykeep.datadroid.requestmanager.Request;
@@ -31,6 +32,7 @@ public class RSSFeedActivity extends FragmentActivity
     ListView listView;
 	private FeedlyRequestManager requestManager;
 	public final static String MSG_TO_WEBSITE_ACTIVITY = "com.github.feedly.MSG_TO_WEBSITE_ACTIVITY";
+	public static String curFeed;
 	
 	RequestListener requestListener = new RequestListener() {
 		
@@ -73,14 +75,6 @@ public class RSSFeedActivity extends FragmentActivity
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_rssfeed);
-		
-		//WebApiHelper.register(getApplicationContext());
-		
-		//FragmentManager manager = getSupportFragmentManager();
-	    //FragmentTransaction transaction = manager.beginTransaction();
-	    //transaction.replace(R.id.fragment_container, new AuthenticationFragment(), "auth_fragment");
-	    //transaction.addToBackStack("auth_fragment");
-	    //transaction.commit();
 		
 		listView = (ListView)findViewById(R.id.rssFeedListView);
 		adapter = new SimpleCursorAdapter(this,
@@ -140,6 +134,7 @@ public class RSSFeedActivity extends FragmentActivity
 			FeedlyContract.Feeds.COLUMN_NAME_TITLE,
 			FeedlyContract.Feeds.COLUMN_NAME_WEBSITE
 		};
+		
 		return new CursorLoader(RSSFeedActivity.this, FeedlyContract.Feeds.CONTENT_URI,
 								projection, null, null, null);
 	}
@@ -157,5 +152,12 @@ public class RSSFeedActivity extends FragmentActivity
 	public void onLoaderReset(Loader<Cursor> cursor) {
 		// TODO Auto-generated method stub
 		adapter.swapCursor(null);
+	}
+	
+	public void findFeeds(View view) {
+		
+		EditText edText = (EditText) findViewById(R.id.topicEditText);
+		curFeed = edText.getText().toString();
+		update();
 	}
 }
