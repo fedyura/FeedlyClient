@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.github.feedly.provider.FeedlyContract.AuthorPage;
 import com.github.feedly.provider.FeedlyContract.Categories;
 
 public class FeedlyDBHelper extends SQLiteOpenHelper {
@@ -20,16 +21,15 @@ public class FeedlyDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
             
         Categories.onCreate(db);
-        //TPDiscipline.onCreate(db);
-        //Journal.onCreate(db);
-        //TechnoparkContract.InsertData(db);
+        AuthorPage.onCreate(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             
     	Categories.onUpgrade(db, oldVersion, newVersion);
-        //TPStudent.onUpgrade(db, oldVersion, newVersion);
+    	AuthorPage.onUpgrade(db, oldVersion, newVersion);
+    	//TPStudent.onUpgrade(db, oldVersion, newVersion);
         //TPDiscipline.onUpgrade(db, oldVersion, newVersion);
         //Journal.onUpgrade(db, oldVersion, newVersion);
         onCreate(db);

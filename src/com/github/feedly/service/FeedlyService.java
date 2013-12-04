@@ -1,7 +1,8 @@
 package com.github.feedly.service;
 
 import com.foxykeep.datadroid.service.RequestService;
-import com.github.feedly.operations.FeedlyOperation;
+import com.github.feedly.operations.AuthentificationOperation;
+import com.github.feedly.operations.GetCategoryOperation;
 import com.github.feedly.util.RequestFactory;
 
 public class FeedlyService extends RequestService {
@@ -10,11 +11,11 @@ public class FeedlyService extends RequestService {
     public Operation getOperationForType(int requestType) {
             switch (requestType) {
             	case RequestFactory.REQUEST_CATEGORIES:
-                    System.out.println("I was in service");
-            		return new FeedlyOperation();
+                    return new GetCategoryOperation();
+            	case RequestFactory.REQUEST_AUTHENTIFICATION:
+            		return new AuthentificationOperation();
             	default:
                     return null;
             }
     }
-
 }

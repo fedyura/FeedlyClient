@@ -6,17 +6,10 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".RSSFeedActivity" >
+    tools:context=".AuthorizationActivity" >
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/fragment_container"/>
-    
-    <ListView
-        android:id="@+id/rssFeedListView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:indicatorLeft="250dp"
-        android:indicatorRight="300dp"/>
 </RelativeLayout>

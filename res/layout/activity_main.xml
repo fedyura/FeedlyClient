@@ -39,6 +39,5 @@
         android:layout_alignBottom="@id/MainImage"
         android:layout_alignParentRight="true"
         android:background="@drawable/get_started_button"/>
-    
 
 </RelativeLayout>

@@ -12,9 +12,11 @@ public class FeedlyProvider extends ContentProvider {
 	private FeedlyDBHelper fDBHelper;
 	
 	private static final int CATEGORIES = 0;
-    private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+    private static final int AUTHOR_PAGE = 1;
+	private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     static {
         uriMatcher.addURI(FeedlyContract.AUTHORITY, FeedlyContract.Categories.TABLE_NAME, CATEGORIES);
+        uriMatcher.addURI(FeedlyContract.AUTHORITY, FeedlyContract.AuthorPage.TABLE_NAME, AUTHOR_PAGE);
     }
 	
     @Override
@@ -23,6 +25,8 @@ public class FeedlyProvider extends ContentProvider {
     	switch (uriMatcher.match(uri)) {
         	case CATEGORIES:
                 return fDBHelper.getWritableDatabase().delete(FeedlyContract.Categories.TABLE_NAME, selection, selectionArgs);
+        	case AUTHOR_PAGE:
+        		return fDBHelper.getWritableDatabase().delete(FeedlyContract.AuthorPage.TABLE_NAME, selection, selectionArgs);
         	default:
                 return 0;
         }
@@ -34,6 +38,8 @@ public class FeedlyProvider extends ContentProvider {
     	switch (uriMatcher.match(uri)) {
         	case CATEGORIES:
                 return FeedlyContract.Categories.CONTENT_TYPE;
+        	case AUTHOR_PAGE:
+        		return FeedlyContract.AuthorPage.CONTENT_TYPE;
         	default:
                 return null;
         }
@@ -46,6 +52,10 @@ public class FeedlyProvider extends ContentProvider {
         	case CATEGORIES: {
                 fDBHelper.getWritableDatabase().insert(FeedlyContract.Categories.TABLE_NAME, null, values);
                 getContext().getContentResolver().notifyChange(FeedlyContract.Categories.CONTENT_URI, null);
+        	}
+        	case AUTHOR_PAGE: {
+                fDBHelper.getWritableDatabase().insert(FeedlyContract.AuthorPage.TABLE_NAME, null, values);
+                getContext().getContentResolver().notifyChange(FeedlyContract.AuthorPage.CONTENT_URI, null);
         	}
         	default:
                 return null;
@@ -70,6 +80,9 @@ public class FeedlyProvider extends ContentProvider {
         	case CATEGORIES:
                 tableName = FeedlyContract.Categories.TABLE_NAME;
                 break;
+        	case AUTHOR_PAGE:
+        		tableName = FeedlyContract.AuthorPage.TABLE_NAME;
+        		break;
         	default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -89,7 +102,10 @@ public class FeedlyProvider extends ContentProvider {
         switch (uriMatcher.match(uri)) {
         	case CATEGORIES:
                 count = db.update(FeedlyContract.Categories.TABLE_NAME, values, selection, selectionArgs);
-                break;
+        	    break;
+        	case AUTHOR_PAGE:
+        		count = db.update(FeedlyContract.AuthorPage.TABLE_NAME, values, selection, selectionArgs);
+        		break;
         	default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -97,7 +113,4 @@ public class FeedlyProvider extends ContentProvider {
         getContext().getContentResolver().notifyChange(uri, null);
         return count;
 	}
-    
-    
-
 }

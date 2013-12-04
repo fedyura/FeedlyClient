@@ -19,5 +19,4 @@ public class FeedlyRequestManager extends RequestManager {
         }
         return sInstance;
 	}
-
 }

@@ -68,6 +68,14 @@ public class RSSFeedActivity extends FragmentActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_rssfeed);
 		
+		//WebApiHelper.register(getApplicationContext());
+		
+		//FragmentManager manager = getSupportFragmentManager();
+	    //FragmentTransaction transaction = manager.beginTransaction();
+	    //transaction.replace(R.id.fragment_container, new AuthenticationFragment(), "auth_fragment");
+	    //transaction.addToBackStack("auth_fragment");
+	    //transaction.commit();
+		
 		listView = (ListView)findViewById(R.id.rssFeedListView);
 		adapter = new SimpleCursorAdapter(this,
                 R.layout.one_resource, 
@@ -76,6 +84,7 @@ public class RSSFeedActivity extends FragmentActivity
                 new int[]{ R.id.resourseInfo }, 
                 0);
         listView.setAdapter(adapter);
+        
         /*listView.setOnRefreshListener(new OnRefreshListener<ListView>() {
 
                 @Override
@@ -85,6 +94,7 @@ public class RSSFeedActivity extends FragmentActivity
         });*/
         
         //getSupportLoaderManager().initLoader(LOADER_ID, null, loaderCallbacks);
+        
         requestManager = FeedlyRequestManager.from(this);
 	}
 	
@@ -97,7 +107,6 @@ public class RSSFeedActivity extends FragmentActivity
 
 	public void update() {
 		
-		System.out.println("I was in update");
 		//listView.setRefreshing();
         Request updateRequest = new Request(RequestFactory.REQUEST_CATEGORIES);
         //updateRequest.put("screen_name", "habrahabr");
