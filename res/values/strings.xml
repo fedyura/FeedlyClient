@@ -36,10 +36,9 @@
     <string name="feedly_api_param_grant_type_default_val">authorization_code</string>
     <string name="feedly_api_get_subscriptions">/v3/subscriptions</string>
     <string name="feedly_api_get_categories">/v3/search/feeds?q=apple</string>
-    
     <string name="feedly_api_timestamp">timestamp</string>
-    
     <string name="title_activity_authorization">AuthorizationActivity</string>
     <string name="title_activity_authentification">AuthentificationActivity</string>
+    <string name="title_activity_show_website">ShowWebsiteActivity</string>
 
 </resources>

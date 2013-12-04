@@ -44,6 +44,10 @@
             android:name="com.github.feedlyclient.AuthentificationActivity"
             android:label="@string/title_activity_authentification" >
         </activity>
+        <activity
+            android:name="com.github.feedly.activities.ShowWebsiteActivity"
+            android:label="@string/title_activity_show_website" >
+        </activity>
     </application>
 
 </manifest>

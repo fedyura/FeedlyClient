@@ -15,15 +15,10 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager.LoaderCallbacks;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,21 +29,18 @@ import android.webkit.WebViewClient;
 
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
-import com.github.feedly.provider.FeedlyContract;
 import com.github.feedly.requests.FeedlyRequestManager;
 import com.github.feedly.util.GetFeedlyCodeRequest;
 import com.github.feedly.util.RequestFactory;
 import com.github.feedlyclient.R;
 
-public class AuthenticationFragment extends Fragment
-	implements LoaderCallbacks<Cursor> {
+public class AuthenticationFragment extends Fragment {
 	
 	public final static int LOADER_ID = 1;
 	public static String authorCode;
 	
 	public ProgressDialog authenticationDialog;
 	private FeedlyRequestManager requestManager;
-	private SimpleCursorAdapter adapter;
 	
 	RequestListener requestListener = new RequestListener() {
 		
@@ -65,19 +57,19 @@ public class AuthenticationFragment extends Fragment
 		@Override
 		public void onRequestFinished(Request request, Bundle resultData) {
 			// TODO Auto-generated method stub
-			
+			showError();
 		}
 
 		@Override
 		public void onRequestConnectionError(Request request, int statusCode) {
 			// TODO Auto-generated method stub
-			//showError();
+			showError();
 		}
 
 		@Override
 		public void onRequestDataError(Request request) {
 			// TODO Auto-generated method stub
-			//showError();
+			showError();
 		}
 
 		@Override
@@ -190,40 +182,17 @@ public class AuthenticationFragment extends Fragment
 		};
 	}
 	
-	private void showAuthenticationDialog(String title)
-	{
-		if (authenticationDialog == null)
-		{
-			authenticationDialog = new ProgressDialog(getActivity());
-		}
-		authenticationDialog.dismiss();
-		authenticationDialog.setTitle(title);
-		authenticationDialog.show();
-	}
-	
-	private void hideAuthenticationDialog()
-	{
-		if (authenticationDialog == null)
-		{
-			return;
-		}
-		authenticationDialog.dismiss();
-		authenticationDialog = null;
-	}
-
 	@SuppressLint("SetJavaScriptEnabled")
 	private void initializeViews(Bundle savedInstanceState)
 	{
 		if(savedInstanceState == null && getActivity() != null)
 		{
-			//boolean isTablet = getActivity().getResources().getBoolean(R.bool.isTablet);
 			boolean isTablet = true;
 			WebSettings.ZoomDensity zoomDensity = isTablet ? WebSettings.ZoomDensity.MEDIUM : WebSettings.ZoomDensity.FAR;
 
 			WebView description = (WebView)getView().findViewById(R.id.description);
 			description.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
 			description.getSettings().setJavaScriptEnabled(true);
-			//description.getSettings().setPluginState(WebSettings.PluginState.ON);
 			description.getSettings().setDefaultTextEncodingName("utf-8");
 			description.getSettings().setLoadWithOverviewMode(true);
 			description.getSettings().setDefaultZoom(zoomDensity);
@@ -286,45 +255,6 @@ public class AuthenticationFragment extends Fragment
 		return getActivity().getResources().getString(resourceId);
 	}
 
-	@Override
-    public void onStart() {
-            
-            super.onStart();
-            getLoaderManager().initLoader(LOADER_ID, null, this);
-    }
-
-	public void update() {
-		
-		//Request updateRequest = new Request(RequestFactory.REQUEST_AUTHENTIFICATION);
-        //requestManager.execute(updateRequest, requestListener);
-	}
-	
-	@Override
-	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
-		// TODO Auto-generated method stub
-		final String[] projection = { 
-			FeedlyContract.AuthorPage._ID,
-			FeedlyContract.AuthorPage.COLUMN_NAME_DATA
-		};
-		return new CursorLoader(getActivity(), FeedlyContract.AuthorPage.CONTENT_URI,
-								projection, null, null, null);
-	}
-
-	@Override
-	public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
-		// TODO Auto-generated method stub
-		//adapter.swapCursor(cursor);
-		if (cursor.getCount() == 0) {
-            update();
-		}
-	}
-
-	@Override
-	public void onLoaderReset(Loader<Cursor> cursor) {
-		// TODO Auto-generated method stub
-		//adapter.swapCursor(null);
-	}
-	
 	private String getCodeFromUrl(String url)
     {
     	try
@@ -345,5 +275,4 @@ public class AuthenticationFragment extends Fragment
 		}
     	return null;
     }
-	
 }

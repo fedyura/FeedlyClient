@@ -39,30 +39,27 @@ public final class GetCategoryOperation implements Operation {
         netConn.setParameters(params);
 		
 		ConnectionResult result = netConn.execute();
-        ContentValues[] feedlyValues;
-        
-        try {
+		ContentValues[] feedlyValues;
+		
+		try {
             JSONObject answerJson = new JSONObject(result.body);
             JSONArray feedlyJson = answerJson.getJSONArray("results");
         	
         	feedlyValues = new ContentValues[feedlyJson.length()];
             
-            for (int i = 0; i < feedlyJson.length(); ++i) {
-                //ContentValues feedly = new ContentValues();
-                System.out.println(feedlyJson.getJSONObject(i).getString("website"));
-                //feedly.put("body", feedlyJson.getJSONObject(i).getString("label"));
-                //feedlyValues[i] = feedly;
+        	for (int i = 0; i < feedlyJson.length(); ++i) {
+                ContentValues feedly = new ContentValues();
+                feedly.put(FeedlyContract.Feeds.COLUMN_NAME_TITLE, feedlyJson.getJSONObject(i).getString("title"));
+                feedly.put(FeedlyContract.Feeds.COLUMN_NAME_WEBSITE, feedlyJson.getJSONObject(i).getString("website"));
+                feedly.put(FeedlyContract.Feeds.COLUMN_NAME_KEYWORD_NAME, "apple");
+                feedlyValues[i] = feedly;
             }
         } catch (JSONException e) {
             throw new DataException(e.getMessage());
         }
         
-        //context.getContentResolver().delete(FeedlyContract.Categories.CONTENT_URI, null, null);
-        //context.getContentResolver().bulkInsert(FeedlyContract.Categories.CONTENT_URI, feedlyValues);
+        context.getContentResolver().delete(FeedlyContract.Feeds.CONTENT_URI, null, null);
+        context.getContentResolver().bulkInsert(FeedlyContract.Feeds.CONTENT_URI, feedlyValues);
         return null;
 	}
-	
-	
-
-	
 }

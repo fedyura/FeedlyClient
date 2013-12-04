@@ -1,6 +1,7 @@
 package com.github.feedly.activities;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -9,11 +10,15 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.Menu;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.github.feedly.provider.FeedlyContract;
+import com.github.feedly.provider.FeedlyContract.Feeds;
 import com.github.feedly.requests.FeedlyRequestManager;
 import com.github.feedly.util.RequestFactory;
 import com.github.feedlyclient.R;
@@ -25,6 +30,7 @@ public class RSSFeedActivity extends FragmentActivity
 	private SimpleCursorAdapter adapter;
     ListView listView;
 	private FeedlyRequestManager requestManager;
+	public final static String MSG_TO_WEBSITE_ACTIVITY = "com.github.feedly.MSG_TO_WEBSITE_ACTIVITY";
 	
 	RequestListener requestListener = new RequestListener() {
 		
@@ -80,22 +86,30 @@ public class RSSFeedActivity extends FragmentActivity
 		adapter = new SimpleCursorAdapter(this,
                 R.layout.one_resource, 
                 null, 
-                new String[]{ FeedlyContract.Categories.COLUMN_NAME_CATEGORY_NAME },
+                new String[]{ FeedlyContract.Feeds.COLUMN_NAME_TITLE },
                 new int[]{ R.id.resourseInfo }, 
                 0);
         listView.setAdapter(adapter);
         
-        /*listView.setOnRefreshListener(new OnRefreshListener<ListView>() {
-
-                @Override
-                public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                        update();
-                }
-        });*/
-        
-        //getSupportLoaderManager().initLoader(LOADER_ID, null, loaderCallbacks);
+        listView.setOnItemClickListener(new OnItemClickListener() {
+                  
+        	public void onItemClick(AdapterView<?> parent, View view,
+                                int position, long id) {
+        	             
+        	Cursor cursor = (Cursor) ((SimpleCursorAdapter)parent.getAdapter()).getItem(position);
+        	String website = cursor.getString(cursor.getColumnIndex(Feeds.COLUMN_NAME_WEBSITE));
+        	startWebsiteActivity(website);
+        	}
+        });
         
         requestManager = FeedlyRequestManager.from(this);
+	}
+	
+	public void startWebsiteActivity(String url) {
+		
+		Intent intent = new Intent(this, ShowWebsiteActivity.class);
+    	intent.putExtra(MSG_TO_WEBSITE_ACTIVITY, url);
+        startActivity(intent);
 	}
 	
 	@Override
@@ -107,9 +121,7 @@ public class RSSFeedActivity extends FragmentActivity
 
 	public void update() {
 		
-		//listView.setRefreshing();
-        Request updateRequest = new Request(RequestFactory.REQUEST_CATEGORIES);
-        //updateRequest.put("screen_name", "habrahabr");
+		Request updateRequest = new Request(RequestFactory.REQUEST_CATEGORIES);
         requestManager.execute(updateRequest, requestListener);
 	}
 	
@@ -124,10 +136,11 @@ public class RSSFeedActivity extends FragmentActivity
 	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
 		// TODO Auto-generated method stub
 		final String[] projection = { 
-			FeedlyContract.Categories._ID,
-			FeedlyContract.Categories.COLUMN_NAME_CATEGORY_NAME
+			FeedlyContract.Feeds._ID,
+			FeedlyContract.Feeds.COLUMN_NAME_TITLE,
+			FeedlyContract.Feeds.COLUMN_NAME_WEBSITE
 		};
-		return new CursorLoader(RSSFeedActivity.this, FeedlyContract.Categories.CONTENT_URI,
+		return new CursorLoader(RSSFeedActivity.this, FeedlyContract.Feeds.CONTENT_URI,
 								projection, null, null, null);
 	}
 
