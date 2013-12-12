@@ -13,32 +13,30 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.github.feedly.provider.FeedlyContract;
-import com.github.feedly.provider.FeedlyContract.Feeds;
+import com.github.feedly.provider.FeedlyContract.Articles;
 import com.github.feedly.requests.FeedlyRequestManager;
 import com.github.feedly.util.RequestFactory;
 import com.github.feedlyclient.R;
 
-public class RSSFeedActivity extends FragmentActivity
-	implements LoaderCallbacks<Cursor>	{
-	
-	public final static int LOADER_ID = 1;
-	private feedInfoAdapter adapter;
+public class BestFeedsActivity extends FragmentActivity
+	implements LoaderCallbacks<Cursor> {
+
+	public final static int LOADER_ID = 2;
+	private SimpleCursorAdapter adapter;
     ListView listView;
 	private FeedlyRequestManager requestManager;
-	public final static String MSG_TO_WEBSITE_ACTIVITY = "com.github.feedly.MSG_TO_WEBSITE_ACTIVITY";
-	public static String curFeed;
+	public static String curFeedId;
 	
 	RequestListener requestListener = new RequestListener() {
 		
 		void showError() {
 	        
-			AlertDialog.Builder builder = new AlertDialog.Builder(RSSFeedActivity.this);
+			AlertDialog.Builder builder = new AlertDialog.Builder(BestFeedsActivity.this);
 	        builder.
 	                setTitle(android.R.string.dialog_alert_title).
 	                setMessage(getString(R.string.faled_to_load_data)).
@@ -74,16 +72,19 @@ public class RSSFeedActivity extends FragmentActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_rssfeed);
+		setContentView(R.layout.activity_best_feeds);
 		
-		listView = (ListView)findViewById(R.id.rssFeedListView);
-		adapter = new feedInfoAdapter(this);
-		/*adapter = new SimpleCursorAdapter(this,
-                R.layout.one_resource, 
+		Intent intent = getIntent();
+        String message = intent.getStringExtra(feedInfoAdapter.MSGWithFeedId);
+        curFeedId = message;
+		
+		listView = (ListView)findViewById(R.id.bestArticlesListView);
+		adapter = new SimpleCursorAdapter(this,
+                R.layout.best_article_resource, 
                 null, 
-                new String[]{ FeedlyContract.Feeds.COLUMN_NAME_TITLE },
-                new int[]{ R.id.resourseInfo }, 
-                0);*/
+                new String[]{ FeedlyContract.Articles.COLUMN_NAME_TITLE },
+                new int[]{ R.id.articleInfo }, 
+                0);
         listView.setAdapter(adapter);
         
         listView.setOnItemClickListener(new OnItemClickListener() {
@@ -92,19 +93,19 @@ public class RSSFeedActivity extends FragmentActivity
                                 int position, long id) {
         	             
         	Cursor cursor = (Cursor) ((SimpleCursorAdapter)parent.getAdapter()).getItem(position);
-        	String website = cursor.getString(cursor.getColumnIndex(Feeds.COLUMN_NAME_WEBSITE));
+        	String website = cursor.getString(cursor.getColumnIndex(Articles.COLUMN_NAME_REFERENCE));
         	startWebsiteActivity(website);
         	}
         });
         
         requestManager = FeedlyRequestManager.from(this);
 	}
-	
-	public void startWebsiteActivity(String url) {
-		
-		Intent intent = new Intent(this, ShowWebsiteActivity.class);
-    	intent.putExtra(MSG_TO_WEBSITE_ACTIVITY, url);
-        startActivity(intent);
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.best_feeds, menu);
+		return true;
 	}
 	
 	@Override
@@ -113,31 +114,30 @@ public class RSSFeedActivity extends FragmentActivity
             super.onStart();
             getSupportLoaderManager().initLoader(LOADER_ID, null, this);
     }
-
+	
+	public void startWebsiteActivity(String url) {
+		
+		Intent intent = new Intent(this, ShowWebsiteActivity.class);
+    	intent.putExtra(feedInfoAdapter.MSGWithFeedId, url);
+        startActivity(intent);
+	}
+	
 	public void update() {
 		
-		Request updateRequest = new Request(RequestFactory.REQUEST_CATEGORIES);
+		Request updateRequest = new Request(RequestFactory.REQUEST_BESTARTICLES);
         requestManager.execute(updateRequest, requestListener);
 	}
 	
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.rssfeed, menu);
-		return true;
-	}
-
-	@Override
 	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
 		// TODO Auto-generated method stub
 		final String[] projection = { 
-			FeedlyContract.Feeds._ID,
-			FeedlyContract.Feeds.COLUMN_NAME_TITLE,
-			FeedlyContract.Feeds.COLUMN_NAME_WEBSITE,
-			FeedlyContract.Feeds.COLUMN_NAME_FEEDID
+			FeedlyContract.Articles._ID,
+			FeedlyContract.Articles.COLUMN_NAME_TITLE,
+			FeedlyContract.Articles.COLUMN_NAME_REFERENCE
 		};
 		
-		return new CursorLoader(RSSFeedActivity.this, FeedlyContract.Feeds.CONTENT_URI,
+		return new CursorLoader(BestFeedsActivity.this, FeedlyContract.Articles.CONTENT_URI,
 								projection, null, null, null);
 	}
 
@@ -154,12 +154,5 @@ public class RSSFeedActivity extends FragmentActivity
 	public void onLoaderReset(Loader<Cursor> cursor) {
 		// TODO Auto-generated method stub
 		adapter.swapCursor(null);
-	}
-	
-	public void findFeeds(View view) {
-		
-		EditText edText = (EditText) findViewById(R.id.topicEditText);
-		curFeed = edText.getText().toString();
-		update();
 	}
 }

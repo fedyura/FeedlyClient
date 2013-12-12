@@ -48,6 +48,10 @@
             android:name="com.github.feedly.activities.ShowWebsiteActivity"
             android:label="@string/title_activity_show_website" >
         </activity>
+        <activity
+            android:name="com.github.feedly.activities.BestFeedsActivity"
+            android:label="@string/title_activity_best_feeds" >
+        </activity>
     </application>
 
 </manifest>

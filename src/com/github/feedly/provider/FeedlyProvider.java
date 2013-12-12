@@ -12,9 +12,12 @@ public class FeedlyProvider extends ContentProvider {
 	private FeedlyDBHelper fDBHelper;
 	
 	private static final int FEEDS = 0;
+	private static final int ARTICLES = 1;
+	
     private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     static {
         uriMatcher.addURI(FeedlyContract.AUTHORITY, FeedlyContract.Feeds.TABLE_NAME, FEEDS);
+        uriMatcher.addURI(FeedlyContract.AUTHORITY, FeedlyContract.Articles.TABLE_NAME, ARTICLES);
     }
 	
     @Override
@@ -23,6 +26,8 @@ public class FeedlyProvider extends ContentProvider {
     	switch (uriMatcher.match(uri)) {
         	case FEEDS:
                 return fDBHelper.getWritableDatabase().delete(FeedlyContract.Feeds.TABLE_NAME, selection, selectionArgs);
+        	case ARTICLES:
+                return fDBHelper.getWritableDatabase().delete(FeedlyContract.Articles.TABLE_NAME, selection, selectionArgs);
         	default:
                 return 0;
         }
@@ -34,6 +39,8 @@ public class FeedlyProvider extends ContentProvider {
     	switch (uriMatcher.match(uri)) {
         	case FEEDS:
                 return FeedlyContract.Feeds.CONTENT_TYPE;
+        	case ARTICLES:
+                return FeedlyContract.Articles.CONTENT_TYPE;
         	default:
                 return null;
         }
@@ -46,6 +53,10 @@ public class FeedlyProvider extends ContentProvider {
         	case FEEDS: {
                 fDBHelper.getWritableDatabase().insert(FeedlyContract.Feeds.TABLE_NAME, null, values);
                 getContext().getContentResolver().notifyChange(FeedlyContract.Feeds.CONTENT_URI, null);
+        	}
+        	case ARTICLES: {
+                fDBHelper.getWritableDatabase().insert(FeedlyContract.Articles.TABLE_NAME, null, values);
+                getContext().getContentResolver().notifyChange(FeedlyContract.Articles.CONTENT_URI, null);
         	}
         	default:
                 return null;
@@ -70,6 +81,9 @@ public class FeedlyProvider extends ContentProvider {
         	case FEEDS:
                 tableName = FeedlyContract.Feeds.TABLE_NAME;
                 break;
+        	case ARTICLES:
+                tableName = FeedlyContract.Articles.TABLE_NAME;
+                break;
         	default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -89,6 +103,9 @@ public class FeedlyProvider extends ContentProvider {
         switch (uriMatcher.match(uri)) {
         	case FEEDS:
                 count = db.update(FeedlyContract.Feeds.TABLE_NAME, values, selection, selectionArgs);
+        	    break;
+        	case ARTICLES:
+                count = db.update(FeedlyContract.Articles.TABLE_NAME, values, selection, selectionArgs);
         	    break;
         	default:
                 throw new IllegalArgumentException("Unknown URI " + uri);

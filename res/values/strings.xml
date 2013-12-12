@@ -36,13 +36,16 @@
     <string name="feedly_api_param_grant_type_default_val">authorization_code</string>
     <string name="feedly_api_get_subscriptions">/v3/subscriptions</string>
     <string name="feedly_api_get_categories">/v3/search/feeds</string>
+    <string name="feedly_api_get_best_articles">/v3/mixes/contents</string>
     <string name="feedly_api_get_categories_param">q</string>
+    <string name="stream_par">streamId</string>
     <string name="feedly_api_timestamp">timestamp</string>
     <string name="title_activity_authorization">AuthorizationActivity</string>
     <string name="title_activity_authentification">AuthentificationActivity</string>
     <string name="title_activity_show_website">ShowWebsiteActivity</string>
-
     <string name="hintTopic"> Enter topic </string>
     <string name="findText"> Find </string>
-    
+    <string name="bestTopics"> Best </string>
+    <string name="title_activity_best_feeds">BestFeedsActivity</string>
+
 </resources>

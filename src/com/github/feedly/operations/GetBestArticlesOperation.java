@@ -17,17 +17,17 @@ import com.foxykeep.datadroid.network.NetworkConnection;
 import com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.service.RequestService.Operation;
-import com.github.feedly.activities.RSSFeedActivity;
+import com.github.feedly.activities.BestFeedsActivity;
 import com.github.feedly.provider.FeedlyContract;
-import com.github.feedly.util.GetFeedlyCategories;
+import com.github.feedly.util.GetBestArticles;
 
-public final class GetCategoryOperation implements Operation {
+public final class GetBestArticlesOperation implements Operation {
 
-	String categoryCode;
+	String streamId;
 	
-	public GetCategoryOperation() {
+	public GetBestArticlesOperation() {
 		
-		categoryCode = RSSFeedActivity.curFeed;
+		streamId = BestFeedsActivity.curFeedId;
 	}
 	
 	@Override
@@ -35,40 +35,41 @@ public final class GetCategoryOperation implements Operation {
 			throws ConnectionException, DataException, CustomRequestException {
 		// TODO Auto-generated method stub
 		
-		System.out.println("I was here");
-		GetFeedlyCategories feedlyCat = new GetFeedlyCategories(context, categoryCode);
+		GetBestArticles feedlyCat = new GetBestArticles(context, streamId);
 		NetworkConnection netConn = new NetworkConnection(context, feedlyCat.getEncodedUrl());
 		
-		System.out.println(feedlyCat.getOAuthToken());
 		System.out.println(feedlyCat.getEncodedUrl());
-		
 		HashMap<String, String> params = new HashMap<String, String>();
         params.put("Authorization ", "OAuth " + feedlyCat.getOAuthToken());
         netConn.setParameters(params);
 		
 		ConnectionResult result = netConn.execute();
 		ContentValues[] feedlyValues;
+		System.out.println(result.body);
 		
 		try {
             JSONObject answerJson = new JSONObject(result.body);
-            JSONArray feedlyJson = answerJson.getJSONArray("results");
+            //System.out.println("I am here");
+            JSONArray feedlyJson = answerJson.getJSONArray("items");
         	
         	feedlyValues = new ContentValues[feedlyJson.length()];
-            
+            //System.out.println("I was here");
         	for (int i = 0; i < feedlyJson.length(); ++i) {
                 ContentValues feedly = new ContentValues();
-                feedly.put(FeedlyContract.Feeds.COLUMN_NAME_TITLE, feedlyJson.getJSONObject(i).getString("title"));
-                feedly.put(FeedlyContract.Feeds.COLUMN_NAME_WEBSITE, feedlyJson.getJSONObject(i).getString("website"));
-                feedly.put(FeedlyContract.Feeds.COLUMN_NAME_FEEDID, feedlyJson.getJSONObject(i).getString("feedId"));
-                feedly.put(FeedlyContract.Feeds.COLUMN_NAME_KEYWORD_NAME, "apple");
+                //System.out.println(feedlyJson.getJSONObject(i).getString("title"));
+                //System.out.println(feedlyJson.getJSONObject(i).getString("originId"));
+                //System.out.println(feedlyJson.getJSONObject(i).getString("title"));
+                feedly.put(FeedlyContract.Articles.COLUMN_NAME_TITLE, feedlyJson.getJSONObject(i).getString("title"));
+                feedly.put(FeedlyContract.Articles.COLUMN_NAME_REFERENCE, feedlyJson.getJSONObject(i).getString("originId"));
+                feedly.put(FeedlyContract.Articles.COLUMN_NAME_KEYWORD_NAME, streamId);
                 feedlyValues[i] = feedly;
             }
         } catch (JSONException e) {
             throw new DataException(e.getMessage());
         }
         
-        context.getContentResolver().delete(FeedlyContract.Feeds.CONTENT_URI, null, null);
-        context.getContentResolver().bulkInsert(FeedlyContract.Feeds.CONTENT_URI, feedlyValues);
+        context.getContentResolver().delete(FeedlyContract.Articles.CONTENT_URI, null, null);
+        context.getContentResolver().bulkInsert(FeedlyContract.Articles.CONTENT_URI, feedlyValues);
         return null;
 	}
 }
