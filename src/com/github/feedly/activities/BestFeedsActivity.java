@@ -94,11 +94,13 @@ public class BestFeedsActivity extends FragmentActivity
         	             
         	Cursor cursor = (Cursor) ((SimpleCursorAdapter)parent.getAdapter()).getItem(position);
         	String website = cursor.getString(cursor.getColumnIndex(Articles.COLUMN_NAME_REFERENCE));
+        	System.out.println("website =" + website);
         	startWebsiteActivity(website);
         	}
         });
         
         requestManager = FeedlyRequestManager.from(this);
+        update();
 	}
 
 	@Override
@@ -111,14 +113,14 @@ public class BestFeedsActivity extends FragmentActivity
 	@Override
     public void onStart() {
             
-            super.onStart();
-            getSupportLoaderManager().initLoader(LOADER_ID, null, this);
+        super.onStart();
+        getSupportLoaderManager().initLoader(LOADER_ID, null, this);
     }
 	
 	public void startWebsiteActivity(String url) {
 		
 		Intent intent = new Intent(this, ShowWebsiteActivity.class);
-    	intent.putExtra(feedInfoAdapter.MSGWithFeedId, url);
+    	intent.putExtra(RSSFeedActivity.MSG_TO_WEBSITE_ACTIVITY, url);
         startActivity(intent);
 	}
 	

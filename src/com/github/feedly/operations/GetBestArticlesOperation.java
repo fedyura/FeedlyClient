@@ -56,11 +56,10 @@ public final class GetBestArticlesOperation implements Operation {
             //System.out.println("I was here");
         	for (int i = 0; i < feedlyJson.length(); ++i) {
                 ContentValues feedly = new ContentValues();
-                //System.out.println(feedlyJson.getJSONObject(i).getString("title"));
-                //System.out.println(feedlyJson.getJSONObject(i).getString("originId"));
-                //System.out.println(feedlyJson.getJSONObject(i).getString("title"));
                 feedly.put(FeedlyContract.Articles.COLUMN_NAME_TITLE, feedlyJson.getJSONObject(i).getString("title"));
-                feedly.put(FeedlyContract.Articles.COLUMN_NAME_REFERENCE, feedlyJson.getJSONObject(i).getString("originId"));
+                JSONArray ref_infoJson = new JSONArray(feedlyJson.getJSONObject(i).getString("alternate"));
+                System.out.println(ref_infoJson.getJSONObject(0).getString("href"));
+                feedly.put(FeedlyContract.Articles.COLUMN_NAME_REFERENCE, ref_infoJson.getJSONObject(0).getString("href"));
                 feedly.put(FeedlyContract.Articles.COLUMN_NAME_KEYWORD_NAME, streamId);
                 feedlyValues[i] = feedly;
             }
