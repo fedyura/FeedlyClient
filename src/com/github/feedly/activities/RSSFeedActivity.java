@@ -5,21 +5,18 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.Menu;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
 
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.github.feedly.provider.FeedlyContract;
-import com.github.feedly.provider.FeedlyContract.Feeds;
 import com.github.feedly.requests.FeedlyRequestManager;
 import com.github.feedly.util.RequestFactory;
 import com.github.feedlyclient.R;
@@ -28,11 +25,12 @@ public class RSSFeedActivity extends FragmentActivity
 	implements LoaderCallbacks<Cursor>	{
 	
 	public final static int LOADER_ID = 1;
-	private feedInfoAdapter adapter;
+	//private feedInfoAdapter adapter;
     ListView listView;
 	private FeedlyRequestManager requestManager;
 	public final static String MSG_TO_WEBSITE_ACTIVITY = "com.github.feedly.MSG_TO_WEBSITE_ACTIVITY";
 	public static String curFeed;
+	private FeedsViewerAdapter feedsAdapter;
 	
 	RequestListener requestListener = new RequestListener() {
 		
@@ -75,17 +73,18 @@ public class RSSFeedActivity extends FragmentActivity
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_rssfeed);
+				
+		System.out.println("onCreate method");
 		
-		listView = (ListView)findViewById(R.id.rssFeedListView);
+		feedsAdapter = new FeedsViewerAdapter(this, getSupportFragmentManager());
+
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.frame, new MainFragment(feedsAdapter));
+        fragmentTransaction.commit();
+				
+		/*listView = (ListView)findViewById(R.id.rssFeedListView);
 		adapter = new feedInfoAdapter(this);
-		/*adapter = new SimpleCursorAdapter(this,
-                R.layout.one_resource, 
-                null, 
-                new String[]{ FeedlyContract.Feeds.COLUMN_NAME_TITLE },
-                new int[]{ R.id.resourseInfo }, 
-                0);*/
-        listView.setAdapter(adapter);
-        
+		listView.setAdapter(adapter);
         listView.setOnItemClickListener(new OnItemClickListener() {
                   
         	public void onItemClick(AdapterView<?> parent, View view,
@@ -95,8 +94,9 @@ public class RSSFeedActivity extends FragmentActivity
         	String website = cursor.getString(cursor.getColumnIndex(Feeds.COLUMN_NAME_WEBSITE));
         	startWebsiteActivity(website);
         	}
-        });
+        });*/
         
+        System.out.println("1");
         requestManager = FeedlyRequestManager.from(this);
 	}
 	
@@ -111,11 +111,13 @@ public class RSSFeedActivity extends FragmentActivity
     public void onStart() {
             
             super.onStart();
+            System.out.println("onStart method");
             getSupportLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
 	public void update() {
 		
+		System.out.println("2");
 		Request updateRequest = new Request(RequestFactory.REQUEST_CATEGORIES);
         requestManager.execute(updateRequest, requestListener);
 	}
@@ -137,6 +139,9 @@ public class RSSFeedActivity extends FragmentActivity
 			FeedlyContract.Feeds.COLUMN_NAME_FEEDID
 		};
 		
+		System.out.println("onCreateLoader method");
+		
+		//return null;
 		return new CursorLoader(RSSFeedActivity.this, FeedlyContract.Feeds.CONTENT_URI,
 								projection, null, null, null);
 	}
@@ -144,7 +149,9 @@ public class RSSFeedActivity extends FragmentActivity
 	@Override
 	public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
 		// TODO Auto-generated method stub
-		adapter.swapCursor(cursor);
+		System.out.println("Starting onLoaderFinished method");
+		feedsAdapter.getFeedInfoAdapter().swapCursor(cursor);
+		System.out.println("onLoaderFinished method");
 		if (cursor.getCount() == 0) {
             update();
 		}
@@ -153,7 +160,7 @@ public class RSSFeedActivity extends FragmentActivity
 	@Override
 	public void onLoaderReset(Loader<Cursor> cursor) {
 		// TODO Auto-generated method stub
-		adapter.swapCursor(null);
+		feedsAdapter.getFeedInfoAdapter().swapCursor(null);
 	}
 	
 	public void findFeeds(View view) {

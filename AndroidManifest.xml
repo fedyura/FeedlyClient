@@ -52,6 +52,10 @@
             android:name="com.github.feedly.activities.BestFeedsActivity"
             android:label="@string/title_activity_best_feeds" >
         </activity>
+        <activity
+            android:name="com.github.feedly.activities.ViewPagerActivity"
+            android:label="@string/title_activity_view_pager" >
+        </activity>
     </application>
 
 </manifest>

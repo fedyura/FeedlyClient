@@ -131,7 +131,6 @@ public class AuthenticationFragment extends Fragment {
 			
 			public boolean shouldOverrideUrlLoading(WebView view, String url)
 			{
-				
 				if (url.startsWith(getResourceString(R.string.feedly_redirect_uri))) {
 					
 					String code = getCodeFromUrl(url);
@@ -146,6 +145,7 @@ public class AuthenticationFragment extends Fragment {
 			        
 			        Intent intent = new Intent(getActivity(), RSSFeedActivity.class);
 			    	startActivity(intent);
+			        
 			        return true;
 				}
 				//saveFeedlyTokensFromResponseToPreferences(response);

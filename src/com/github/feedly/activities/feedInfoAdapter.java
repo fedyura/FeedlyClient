@@ -27,6 +27,7 @@ public class feedInfoAdapter extends SimpleCursorAdapter {
                 new int[]{ R.id.resourseInfo }, 
                 0);
 		mContext = context;
+		System.out.println("13");
 	}
 	
 	@Override
@@ -36,7 +37,7 @@ public class feedInfoAdapter extends SimpleCursorAdapter {
 		Button bestArticles;
 		Cursor cursor = (Cursor) getItem(position);
 		final String feedId = cursor.getString(cursor.getColumnIndex(Feeds.COLUMN_NAME_FEEDID));
-		
+		System.out.println("12");
 		if (convertView == null) {
 			
 			convertView = LayoutInflater.from(mContext).inflate(R.layout.one_resource, null);

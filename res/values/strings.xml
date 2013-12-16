@@ -47,5 +47,6 @@
     <string name="findText"> Find </string>
     <string name="bestTopics"> Best </string>
     <string name="title_activity_best_feeds">BestFeedsActivity</string>
+    <string name="title_activity_view_pager">ViewPagerActivity</string>
 
 </resources>
