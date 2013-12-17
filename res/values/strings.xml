@@ -38,6 +38,7 @@
     <string name="feedly_api_get_categories">/v3/search/feeds</string>
     <string name="feedly_api_get_best_articles">/v3/mixes/contents</string>
     <string name="feedly_api_get_categories_param">q</string>
+    <string name="feedly_api_get_categories_number">n</string>
     <string name="stream_par">streamId</string>
     <string name="feedly_api_timestamp">timestamp</string>
     <string name="title_activity_authorization">AuthorizationActivity</string>
@@ -47,5 +48,7 @@
     <string name="findText"> Find </string>
     <string name="bestTopics"> Best </string>
     <string name="title_activity_best_feeds">BestFeedsActivity</string>
-
+    
+    <string name="spinner_text">Number of feeds </string>
+	<string name="findbutton_text">Choose topic </string>
 </resources>

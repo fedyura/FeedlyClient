@@ -13,8 +13,12 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
@@ -33,6 +37,7 @@ public class RSSFeedActivity extends FragmentActivity
 	private FeedlyRequestManager requestManager;
 	public final static String MSG_TO_WEBSITE_ACTIVITY = "com.github.feedly.MSG_TO_WEBSITE_ACTIVITY";
 	public static String curFeed;
+	public static String numberFeeds;
 	
 	RequestListener requestListener = new RequestListener() {
 		
@@ -76,15 +81,31 @@ public class RSSFeedActivity extends FragmentActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_rssfeed);
 		
+		final String[] data = {"3", "5", "10", "15", "20"};
+		ArrayAdapter<String> spinner_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, data);
+		spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        
+        Spinner spinner = (Spinner) findViewById(R.id.spinner_list);
+        spinner.setAdapter(spinner_adapter);
+        // выделяем элемент 
+        spinner.setSelection(2);
+        // устанавливаем обработчик нажатия
+        spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+        	@Override
+        	public void onItemSelected(AdapterView<?> parent, View view,
+        			int position, long id) {
+        		// показываем позиция нажатого элемента
+        		//Toast.makeText(getBaseContext(), "Position = " + position, Toast.LENGTH_SHORT).show();
+        		numberFeeds = data[position];
+        	}
+        	@Override
+        	public void onNothingSelected(AdapterView<?> arg0) {
+        	}
+        });
+		
 		listView = (ListView)findViewById(R.id.rssFeedListView);
 		adapter = new feedInfoAdapter(this);
-		/*adapter = new SimpleCursorAdapter(this,
-                R.layout.one_resource, 
-                null, 
-                new String[]{ FeedlyContract.Feeds.COLUMN_NAME_TITLE },
-                new int[]{ R.id.resourseInfo }, 
-                0);*/
-        listView.setAdapter(adapter);
+		listView.setAdapter(adapter);
         
         listView.setOnItemClickListener(new OnItemClickListener() {
                   

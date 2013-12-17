@@ -13,23 +13,60 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     
-        <Button 
-            android:id="@+id/findButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="@string/findText"
-            android:textSize="12sp"
-            android:onClick="findFeeds"/>
+ 		<LinearLayout
+ 		    android:id="@+id/set_text"
+        	android:layout_width="match_parent"
+        	android:layout_height="wrap_content">
+ 		
+ 			<TextView
+ 				android:id="@+id/spinner_text"
+ 				android:layout_width="0dp"
+ 				android:layout_height="wrap_content"
+				android:text="@string/spinner_text"
+				android:layout_weight="2"/>
+ 		    
+ 			<TextView
+            	android:id="@+id/edit_text"
+            	android:layout_width="0dp"
+            	android:layout_height="wrap_content"
+            	android:layout_weight="5"
+            	android:text="@string/findbutton_text"
+            	android:textSize="16sp"/>
+ 			
+        </LinearLayout>
         
-        <EditText
-            android:id="@+id/topicEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/findButton"
-            android:layout_alignBottom="@id/findButton"
-            android:hint="@string/hintTopic"
-            android:textSize="16sp"/>
+ 		<LinearLayout
+ 		    android:id="@+id/set_layout"
+        	android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+ 			android:layout_below="@id/set_text" >
+ 		    
+ 			<Spinner
+ 				android:id="@+id/spinner_list"
+ 				android:layout_width="0dp"
+ 				android:layout_height="wrap_content"
+				android:layout_weight="2"/>
+ 		    
+ 			<EditText
+            	android:id="@+id/topicEditText"
+            	android:layout_width="0dp"
+            	android:layout_height="wrap_content"
+            	android:layout_weight="5"
+            	android:hint="@string/hintTopic"
+            	android:textSize="16sp"/>
+ 			
+        </LinearLayout>
+        	
+        <Button 
+           	android:id="@+id/findButton"
+           	android:layout_width="wrap_content"
+           	android:layout_height="wrap_content"
+           	android:layout_alignParentRight="true"
+           	android:layout_below="@id/set_layout"
+           	android:text="@string/findText"
+           	android:textSize="12sp"
+           	android:onClick="findFeeds"/>
+        
     </RelativeLayout>    
     
     <ListView

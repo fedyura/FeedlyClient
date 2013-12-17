@@ -24,10 +24,12 @@ import com.github.feedly.util.GetFeedlyCategories;
 public final class GetCategoryOperation implements Operation {
 
 	String categoryCode;
+	String numberFeeds;
 	
 	public GetCategoryOperation() {
 		
 		categoryCode = RSSFeedActivity.curFeed;
+		numberFeeds = RSSFeedActivity.numberFeeds;
 	}
 	
 	@Override
@@ -36,7 +38,7 @@ public final class GetCategoryOperation implements Operation {
 		// TODO Auto-generated method stub
 		
 		System.out.println("I was here");
-		GetFeedlyCategories feedlyCat = new GetFeedlyCategories(context, categoryCode);
+		GetFeedlyCategories feedlyCat = new GetFeedlyCategories(context, categoryCode, numberFeeds);
 		NetworkConnection netConn = new NetworkConnection(context, feedlyCat.getEncodedUrl());
 		
 		System.out.println(feedlyCat.getOAuthToken());
